@@ -2,7 +2,7 @@ import React from "react";
 import { Select, MenuItem } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import dynamic from "next/dynamic";
-import DashboardCard from "@/cusomine/components/shared/DashboardCard";
+import DashboardCard from "@/customize/components/shared/DashboardCard";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 const SalesOverview = () => {
