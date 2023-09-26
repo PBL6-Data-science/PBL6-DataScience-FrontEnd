@@ -15,9 +15,11 @@ import { useRouter } from "next/navigation";
 import AuthService from "@/service/Service/Authentication/AuthService";
 import CustomTextFieldWithLabel from "@/customize/components/customer/CustomTextField";
 
-const LoginForm = () => {
+const RegisterForm = () => {
   const [no, setNo] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const auth = AuthService();
@@ -31,40 +33,61 @@ const LoginForm = () => {
     setPassword(e.target.value);
   };
 
+  const handleConfirmPasswordChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setConfirmPassword(e.target.value);
+  };
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+  };
+
+  const validateField = (field: string, message: any) =>
+    !field || field === "" ? { msg: message, success_flg: false } : null;
+
   const handleValidation = () => {
     let No = no;
     let Password = password;
+    let ConfirmPassword = confirmPassword;
 
-    if (!No || No == "") {
+    const usernameError = validateField(No, "Please enter username.");
+    const passwordError = validateField(Password, "Please enter password.");
+    const confirmPasswordError = validateField(
+      ConfirmPassword,
+      "Please confirm password."
+    );
+
+    if (usernameError || passwordError || confirmPasswordError) {
+      return usernameError || passwordError || confirmPasswordError;
+    }
+
+    if (Password !== ConfirmPassword) {
       return {
-        msg: "Please enter username. ",
-        sucess_flg: false,
+        msg: "Password and Confirm Password do not match.",
+        success_flg: false,
       };
     }
-    if (!Password || Password == "") {
-      return {
-        msg: "Please enter password. ",
-        sucess_flg: false,
-      };
-    }
+
     return {
-      sucess_flg: true,
+      success_flg: true,
     };
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    let validation = handleValidation();
+    let validation: { msg?: any; success_flg: boolean } | null =
+      handleValidation();
 
-    if (!validation.sucess_flg) {
+    if (validation && !validation.success_flg) {
       setAlertMessage(validation.msg ? validation.msg : "");
       setShowAlert(true);
       return;
     } else {
       await auth
-        .login(no, password)
+        .register(no, name, password, confirmPassword)
         .then((res) => {
-          router.push("/");
+          router.push("/login");
         })
         .catch((error) => {
           setAlertMessage(error.message);
@@ -100,12 +123,31 @@ const LoginForm = () => {
           </Box>
           <Box>
             <CustomTextFieldWithLabel
+              label="Name"
+              id="name"
+              value={name}
+              onChange={handleNameChange}
+              placeholder="Enter your name"
+            />
+          </Box>
+          <Box>
+            <CustomTextFieldWithLabel
               type="password"
-              label="password"
+              label="Password"
               id="password"
               value={password}
               onChange={handlePasswordChange}
               placeholder="Enter your password"
+            />
+          </Box>
+          <Box>
+            <CustomTextFieldWithLabel
+              type="password"
+              label="Confirm Password"
+              id="confirmpassword"
+              value={confirmPassword}
+              onChange={handleConfirmPasswordChange}
+              placeholder="Confirm your password"
             />
           </Box>
           {showAlert && (
@@ -118,30 +160,6 @@ const LoginForm = () => {
               {alertMessage}
             </Alert>
           )}
-          <Stack
-            justifyContent="space-between"
-            direction="row"
-            alignItems="center"
-            my={2}
-          >
-            <FormGroup>
-              <FormControlLabel
-                control={<Checkbox defaultChecked />}
-                label="Remeber this Device"
-              />
-            </FormGroup>
-            <Typography
-              component={Link}
-              href="/"
-              fontWeight="500"
-              sx={{
-                textDecoration: "none",
-                color: "primary.main",
-              }}
-            >
-              Forgot Password ?
-            </Typography>
-          </Stack>
           <Box>
             <Button
               color="primary"
@@ -162,14 +180,15 @@ const LoginForm = () => {
             <Typography
               fontWeight="500"
               sx={{
+                marginRight: "22px",
                 textDecoration: "none",
               }}
             >
-              New to DUT Blog?
+              Already have an Account?
             </Typography>
             <Typography
               onClick={() => {
-                router.push("/register");
+                router.push("/login");
               }}
               fontWeight="500"
               sx={{
@@ -178,7 +197,7 @@ const LoginForm = () => {
                 cursor: "pointer",
               }}
             >
-              Create an account?
+              Sign In?
             </Typography>
           </Stack>
         </Stack>
@@ -187,4 +206,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default RegisterForm;
