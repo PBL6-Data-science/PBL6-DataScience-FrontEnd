@@ -31,6 +31,29 @@ const AuthService = () => {
       });
   };
 
+  const register = async (
+    no: any,
+    name: any,
+    password: any,
+    confirmPassword: any
+  ) => {
+    const data: { [key: string]: any } = {
+      no: no,
+      name: name,
+      password: password,
+      confirmPassword: confirmPassword,
+    };
+    const formData = new URLSearchParams(data);
+
+    return await Api.create("/Authentication/register", formData)
+      .then((res) => {
+        return Promise.resolve(res);
+      })
+      .catch((error) => {
+        return Promise.reject(error);
+      });
+  };
+
   const loggedIn = () => {
     const token = getToken();
     if (token) {
@@ -102,6 +125,7 @@ const AuthService = () => {
 
   return {
     login,
+    register,
     loggedIn,
     isTokenExpired,
     setToken,
