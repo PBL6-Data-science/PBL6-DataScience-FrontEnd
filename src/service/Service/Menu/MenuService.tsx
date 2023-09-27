@@ -5,7 +5,7 @@ const MenuService = () => {
     const params = {
       idRole: idRole,
     };
-    return await Api.get(`/Menu/Detail`, params)
+    return await Api.get(`/Menu/byRole`, params)
       .then((response) => {
         return Promise.resolve(response);
       })
