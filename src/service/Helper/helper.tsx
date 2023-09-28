@@ -1,5 +1,5 @@
 import { uniqueId } from "lodash";
-const moment = require("moment");
+import moment from "moment";
 
 const dateFormat = (date: string) => {
   return date ? new Date(date.slice(0, date.lastIndexOf("T"))) : "";
