@@ -39,7 +39,7 @@ const PostCard: React.FC<IntroductionCardProps> = ({ title }) => {
     <>
       <BaseCard title={title}>
         <>
-          <TinyMCEEditor initialValue={content} onChange={handleEditorChange} />
+          {/* <TinyMCEEditor initialValue={content} onChange={handleEditorChange} /> */}
           <Stack
             alignItems="center"
             justifyContent="space-between"

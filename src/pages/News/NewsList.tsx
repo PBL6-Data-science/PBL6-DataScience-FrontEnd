@@ -1,16 +1,5 @@
-import BlankCard from "@/customize/components/shared/BlankCard";
 import DashboardCard from "@/customize/components/shared/DashboardCard";
-import {
-  Box,
-  CardMedia,
-  Avatar,
-  Typography,
-  Grid,
-  CardContent,
-  IconButton,
-  Stack,
-  Chip,
-} from "@mui/material";
+import { Grid, Stack, ButtonProps, styled, Button } from "@mui/material";
 import { IconPoint, IconArticle, IconEye } from "@tabler/icons-react";
 import NewsItem from "./NewsItem";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -21,22 +10,17 @@ import {
   dateFormat,
   mapObjectProperties,
 } from "@/service/Helper/helper";
+import { useRouter } from "next/navigation";
 
-const cardData = [
-  {
-    image: "/assets/image/users/coverImage1.png",
-    avatar: "/assets/image/users/user1.jpg",
-    title: "Card 1",
-    content: "Content for Card 1",
+const ResetButtonStyled = styled(Button)<ButtonProps>(({ theme }) => ({
+  marginLeft: theme.spacing(4.5),
+  [theme.breakpoints.down("sm")]: {
+    width: "100%",
+    marginLeft: 0,
+    textAlign: "center",
+    marginTop: theme.spacing(4),
   },
-  {
-    image: "/assets/image/users/coverImage2.png",
-    avatar: "/assets/image/users/user2.jpg",
-    title: "Card 2",
-    content: "Content for Card 2",
-  },
-  // Add more card data as needed
-];
+}));
 
 const mapToNews = (item: any) => {
   return {
@@ -72,7 +56,7 @@ const NewsList = () => {
   const [menuItems, setMenuItems] = useState<NewsItem[]>([]);
   const newsService = useMemo(() => NewsService(), []);
   const [showAlert, setShowAlert] = useState(false);
-
+  const router = useRouter();
   const fetchNewsItems = useCallback(async () => {
     try {
       await newsService
@@ -96,8 +80,28 @@ const NewsList = () => {
   }, [fetchNewsItems]);
 
   return (
-    <>
-      <DashboardCard title="News List">
+    <DashboardCard title="News List">
+      <>
+        <Stack
+          direction="row"
+          justifyContent="flex-end"
+          alignItems="flex-start"
+          mt={-8}
+          mr={1}
+          mb={2}
+        >
+          <ResetButtonStyled
+            color="success"
+            variant="contained"
+            component="label"
+            sx={{ ml: "auto" }}
+            onClick={() => {
+              router.push("/news/newsPost");
+            }}
+          >
+            Post News
+          </ResetButtonStyled>
+        </Stack>
         <Grid container spacing={2}>
           {menuItems.map((news, index) => (
             <Grid item key={index} xs={12} sm={6} md={4}>
@@ -115,8 +119,8 @@ const NewsList = () => {
             </Grid>
           ))}
         </Grid>
-      </DashboardCard>
-    </>
+      </>
+    </DashboardCard>
   );
 };
 export default NewsList;

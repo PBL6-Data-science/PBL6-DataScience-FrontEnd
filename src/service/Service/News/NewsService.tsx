@@ -11,8 +11,22 @@ const NewsService = () => {
       });
   };
 
+  const getNewsByUserNo = async (userNo: any) => {
+    const params = {
+      userNo: userNo,
+    };
+    return await Api.get(`/News/getNewsByUserNo`, params)
+      .then((response) => {
+        return Promise.resolve(response);
+      })
+      .catch((error) => {
+        return Promise.reject(error);
+      });
+  };
+
   return {
     getAllNews,
+    getNewsByUserNo,
   };
 };
 export default NewsService;
