@@ -22,12 +22,13 @@ import {
   IconGenderTransgender,
 } from "@tabler/icons-react";
 
-import { ElementType, useEffect, useState, useMemo } from "react";
+import { ElementType, useEffect, useState, useMemo, useCallback } from "react";
 import UserService from "@/service/Service/User/UserService";
 import AuthService from "@/service/Service/Authentication/AuthService";
 import {
   mapObjectProperties,
   convertJsonToList,
+  dateConvertExport,
 } from "@/service/Helper/helper";
 import dayjs from "dayjs";
 
@@ -36,6 +37,8 @@ import IntroductionCard from "../Share/Introduction";
 import Media from "../Share/Media";
 import DashboardCard from "@/customize/components/shared/DashboardCard";
 import PostCard from "../Share/Post";
+import NewsService from "@/service/Service/News/NewsService";
+import NewsItem from "@/pages/News/NewsItem";
 
 const ResetButtonStyled = styled(Button)<ButtonProps>(({ theme }) => ({
   marginLeft: theme.spacing(4.5),
@@ -51,6 +54,36 @@ const mapToAppRole = (item: any) => {
   return {
     appRoleNo: item.arId.toString(),
     appRoleName: item.arName,
+  };
+};
+
+interface NewsItem {
+  id: string;
+  title: any;
+  content: string;
+  postDate: string;
+  author: string;
+  typeID: string;
+  backgroundUrl: string;
+  createDate: string;
+  lastUpdatedate: string;
+  lastUpdateby: string;
+  countView: string;
+}
+
+const mapToNews = (item: any) => {
+  return {
+    id: item.nnId.toString(),
+    title: item.nnTitle.toString(),
+    content: item.nnContent,
+    postDate: item.nnPostDate,
+    author: item.nnAuthorId,
+    typeID: item.nTypeId.toString(),
+    backgroundUrl: item.nnUrl,
+    createDate: item.nnCreateDate,
+    lastUpdatedate: item.nnLastUpdateDate,
+    lastUpdateby: item.nnLastUpdateBy,
+    countView: item.nnCountView.toString(),
   };
 };
 
@@ -76,12 +109,15 @@ const ProfilePage = () => {
     userCountNewsFake: 0,
     userCountNewsReal: 0,
   });
+
   const [appRole, setappRole] = useState([
     {
       appRoleNo: "",
       appRoleName: "",
     },
   ]);
+  const [menuItems, setMenuItems] = useState<NewsItem[]>([]);
+  const newsService = useMemo(() => NewsService(), []);
   const router = useRouter();
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   const userService = useMemo(() => UserService(), []);
@@ -92,7 +128,6 @@ const ProfilePage = () => {
       await userService
         .getUserByRole(auth.getUserNo())
         .then((res) => {
-          console.log(res);
           setUserProfile((prevUserProfile) => ({
             ...prevUserProfile,
             ...mapObjectProperties(res.response.data, prevUserProfile),
@@ -109,10 +144,19 @@ const ProfilePage = () => {
         .catch((error) => {
           console.error("Error fetching menu items:", error);
         });
+      await newsService
+        .getNewsByUserNo(auth.getUserNo())
+        .then((res) => {
+          console.log(res);
+          setMenuItems(convertJsonToList(res.response.data, mapToNews));
+        })
+        .catch((error) => {
+          console.error("Error fetching menu items:", error);
+        });
     };
 
     fetchUserData();
-  }, [auth, userService]);
+  }, [auth, newsService, userService]);
 
   return (
     <DashboardCard title="User Profile">
@@ -155,7 +199,7 @@ const ProfilePage = () => {
             userCountNewsReal: userProfile.userCountNewsReal,
           }}
         />
-        <Grid container spacing={2}>
+        <Grid container spacing={12}>
           <Grid item xs={12} md={4}>
             <IntroductionCard
               title="Introduction"
@@ -172,7 +216,25 @@ const ProfilePage = () => {
             ></IntroductionCard>
           </Grid>
           <Grid item xs={12} md={8}>
-            <PostCard title="Post News"></PostCard>
+            <Grid container spacing={2}>
+              {menuItems.map((news, index) => (
+                <Grid item key={index} xs={12} sm={12} md={12}>
+                  <NewsItem
+                    News={{
+                      backGroundUrl: null,
+                      userImageUrl: news.backgroundUrl,
+                      countView: news.countView,
+                      title: news.title,
+                      content: news.content,
+                      datePost: dateConvertExport(
+                        news.postDate
+                      ).toLocaleString(),
+                      totalCommnet: news.countView,
+                    }}
+                  />
+                </Grid>
+              ))}
+            </Grid>
           </Grid>
         </Grid>
       </>

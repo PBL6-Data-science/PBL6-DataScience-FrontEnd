@@ -24,15 +24,16 @@ interface NewsCardProps {
 }
 
 const NewsItem: React.FC<NewsCardProps> = ({ News }) => {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   return (
     <>
       <BlankCard>
         <CardMedia
           component="img"
           alt="Cover Photo"
-          height="200"
+          height="300"
           width="100"
-          image={`/assets/image/users/coverImage.png`}
+          image={`${basePath}/assets/image/users/coverImage.png`}
           sx={{
             borderRadius: "16px",
           }}
@@ -51,7 +52,7 @@ const NewsItem: React.FC<NewsCardProps> = ({ News }) => {
           >
             <Avatar
               alt="Profile Picture"
-              src={`/assets/image/users/user.jpg`}
+              src={`${basePath}/assets/image/users/user.jpg`}
               sx={{
                 marginTop: "-35px",
                 marginLeft: "15px",

@@ -1,12 +1,17 @@
 import React, { useEffect } from "react";
 import { Editor } from "@tinymce/tinymce-react";
+import { TextField } from "@mui/material";
 
 interface TinyMCEEditorProps {
+  id: string;
+  label: string;
   initialValue: string;
-  onChange: (content: string) => void;
+  onChange: (content: any) => void;
 }
 
 const TinyMCEEditor: React.FC<TinyMCEEditorProps> = ({
+  id,
+  label,
   initialValue,
   onChange,
 }) => {
@@ -15,7 +20,7 @@ const TinyMCEEditor: React.FC<TinyMCEEditorProps> = ({
       const tinymce = require("tinymce/tinymce");
 
       tinymce.init({
-        selector: "textarea",
+        selector: `#${id}`,
         height: 500,
         plugins:
           "mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker autocorrect a11ychecker typography inlinecss",
@@ -36,12 +41,12 @@ const TinyMCEEditor: React.FC<TinyMCEEditorProps> = ({
         tinymce.activeEditor?.setContent(initialValue);
       }
     }
-  }, [initialValue, onChange]);
+  }, [id, initialValue, onChange]);
 
   return (
     <>
       <Editor
-        id="textarea"
+        id={id}
         initialValue={initialValue}
         onEditorChange={(content) => onChange(content)}
         init={{

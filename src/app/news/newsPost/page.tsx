@@ -2,16 +2,16 @@
 
 import Layout from "@/customize/Layout/Layout";
 import PageContainer from "@/customize/components/container/PageContainer";
-import NewsList from "@/pages/News/NewsList";
+import NewsPostPage from "@/pages/News/PostNews";
 
-const ListNews = () => {
+const NewsPost = () => {
   return (
     <PageContainer title="News List" description="This is News List">
       <Layout>
-        <NewsList />;
+        <NewsPostPage />;
       </Layout>
     </PageContainer>
   );
 };
 
-export default ListNews;
+export default NewsPost;
