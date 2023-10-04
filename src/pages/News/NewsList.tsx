@@ -27,7 +27,6 @@ const mapToNews = (item: any) => {
     id: item.nnId.toString(),
     title: item.nnTitle.toString(),
     content: item.nnContent,
-    postDate: item.nnPostDate,
     author: item.nnAuthorId,
     typeID: item.nTypeId.toString(),
     backgroundUrl: item.nnUrl,
@@ -43,7 +42,6 @@ interface NewsItem {
   title: any;
   content: string;
   postDate: string;
-  author: string;
   typeID: string;
   backgroundUrl: string;
   createDate: string;
