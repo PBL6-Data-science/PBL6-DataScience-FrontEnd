@@ -1,28 +1,6 @@
-import {
-  Box,
-  Button,
-  ButtonProps,
-  Grid,
-  Typography,
-  styled,
-  IconButton,
-  Stack,
-  TextareaAutosize,
-} from "@mui/material";
+import { Button, ButtonProps, Grid, styled, Stack } from "@mui/material";
 
-import {
-  IconBrandOffice,
-  IconArticle,
-  IconCake,
-  IconBrandGoogleMaps,
-  IconPhoneCall,
-  IconMail,
-  IconFolderSearch,
-  IconBriefcase,
-  IconGenderTransgender,
-} from "@tabler/icons-react";
-
-import { ElementType, useEffect, useState, useMemo, useCallback } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import UserService from "@/service/Service/User/UserService";
 import AuthService from "@/service/Service/Authentication/AuthService";
 import {
@@ -36,7 +14,6 @@ import { useRouter } from "next/navigation";
 import IntroductionCard from "../Share/Introduction";
 import Media from "../Share/Media";
 import DashboardCard from "@/customize/components/shared/DashboardCard";
-import PostCard from "../Share/Post";
 import NewsService from "@/service/Service/News/NewsService";
 import NewsItem from "@/pages/News/NewsItem";
 
@@ -124,7 +101,7 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       await userService
-        .getUserByRole(auth.getUserNo())
+        .getUserByNo(auth.getUserNo())
         .then((res) => {
           setUserProfile((prevUserProfile) => ({
             ...prevUserProfile,
@@ -173,7 +150,7 @@ const ProfilePage = () => {
             component="label"
             sx={{ ml: "auto" }}
             onClick={() => {
-              router.push("/user/userSetting");
+              router.push("/user/userSettingProfile");
             }}
           >
             Setting Profile

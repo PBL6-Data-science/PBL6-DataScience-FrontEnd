@@ -36,6 +36,7 @@ const NewsItem: React.FC<NewsCardProps> = ({ News }) => {
           image={`${basePath}/assets/image/users/coverImage.png`}
           sx={{
             borderRadius: "16px",
+            border: "4px solid #adadad",
           }}
         />
         <CardContent
@@ -90,9 +91,8 @@ const NewsItem: React.FC<NewsCardProps> = ({ News }) => {
             variant="subtitle1"
             component="div"
             sx={{ textAlign: "left", mt: 2 }}
-          >
-            {News.content}
-          </Typography>
+            dangerouslySetInnerHTML={{ __html: News.content }}
+          ></Typography>
           <Stack
             alignItems="center"
             justifyContent="space-between"

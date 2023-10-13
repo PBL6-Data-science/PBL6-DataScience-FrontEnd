@@ -14,11 +14,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body cz-shortcut-listen="true">
-        <script
-          async
-          src="https://cdn.tiny.cloud/1/x8y7l1yy43azqm3amxd7km9c9z9t8nsflmqs5vmtl096nz7e/tinymce/6/tinymce.min.js"
-          referrerPolicy="origin"
-        ></script>
         <ThemeProvider theme={baselightTheme}>
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <CssBaseline />

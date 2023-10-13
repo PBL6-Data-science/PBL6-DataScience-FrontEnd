@@ -58,7 +58,7 @@ const Media: React.FC<ProfileCardProps> = ({
   const pathname = usePathname();
   const [isUploading, setIsUploading] = useState(false);
   const [progressUpload, setProgressUpload] = useState<number>(0);
-  const isSettingPage = pathname === "/user/userSetting";
+  const isSettingPage = pathname === "/user/userSettingProfile";
   const [imageFile, setImageFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -116,10 +116,11 @@ const Media: React.FC<ProfileCardProps> = ({
           <CardMedia
             component="img"
             alt="Cover Photo"
-            height="370"
+            height="470"
             image={`${basePath}/assets/image/users/coverImage.png`}
             sx={{
               borderRadius: "16px",
+              border: "4px solid #adadad",
             }}
           />
           <Box
@@ -128,7 +129,7 @@ const Media: React.FC<ProfileCardProps> = ({
               justifyContent: "center",
               alignItems: "center",
               flexDirection: "column",
-              marginTop: "-60px", // Adjust this value as needed
+              marginTop: "-60px",
             }}
           >
             <Box
@@ -138,8 +139,8 @@ const Media: React.FC<ProfileCardProps> = ({
                 alignItems: "center",
                 background: "linear-gradient(#e66465, #9198e5)",
                 borderRadius: "50%",
-                width: 120,
-                height: 120,
+                width: 160,
+                height: 160,
                 padding: 6,
                 cursor: isSettingPage ? "pointer" : "default",
               }}
@@ -151,8 +152,8 @@ const Media: React.FC<ProfileCardProps> = ({
                   `${basePath}/assets/image/users/user.jpg`
                 }
                 sx={{
-                  width: 108,
-                  height: 108,
+                  width: 150,
+                  height: 150,
                 }}
                 onClick={handleAvatarClick}
               />

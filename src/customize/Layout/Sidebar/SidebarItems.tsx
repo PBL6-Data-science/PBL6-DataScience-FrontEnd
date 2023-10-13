@@ -10,6 +10,7 @@ import {
   IconMoodHappy,
   IconTypography,
   IconUserPlus,
+  IconUserCircle,
   TablerIconsProps,
 } from "@tabler/icons-react";
 import { uniqueId } from "lodash";
@@ -27,6 +28,7 @@ const getIcon = (
     IconLogin: IconLogin,
     IconMoodHappy: IconMoodHappy,
     IconUserPlus: IconUserPlus,
+    IconUserCircle: IconUserCircle,
     IconAperture: IconAperture,
   };
   const IconComponent = iconMap[iconName];
