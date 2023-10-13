@@ -148,7 +148,7 @@ const Media: React.FC<ProfileCardProps> = ({
               <Avatar
                 alt="Profile Picture"
                 src={
-                  userProfile.userImageUrl ??
+                  userProfile?.userImageUrl ??
                   `${basePath}/assets/image/users/user.jpg`
                 }
                 sx={{
@@ -159,10 +159,10 @@ const Media: React.FC<ProfileCardProps> = ({
               />
             </Box>
             <Typography variant="h4" gutterBottom mt={2}>
-              {userProfile.userName}
+              {userProfile?.userName}
             </Typography>
             <Typography variant="subtitle1" color="text.secondary">
-              {userProfile.userRoleApp}
+              {userProfile?.userRoleApp}
             </Typography>
           </Box>
           {isSettingPage && (
@@ -196,7 +196,7 @@ const Media: React.FC<ProfileCardProps> = ({
                 >
                   <IconFileDescription width={20} />
                   <Typography gutterBottom variant={"h6"}>
-                    {userProfile.userCountNews}
+                    {userProfile?.userCountNews}
                   </Typography>
                   <Typography
                     variant="caption"
@@ -216,7 +216,7 @@ const Media: React.FC<ProfileCardProps> = ({
                 >
                   <IconUserCircle width={20} />
                   <Typography gutterBottom variant={"h6"}>
-                    {userProfile.userCountNewsFake}
+                    {userProfile?.userCountNewsFake}
                   </Typography>
                   <Typography
                     variant="caption"
@@ -239,7 +239,7 @@ const Media: React.FC<ProfileCardProps> = ({
                 >
                   <IconUserCheck width={20} />
                   <Typography gutterBottom variant={"h6"}>
-                    {userProfile.userCountNewsReal}
+                    {userProfile?.userCountNewsReal}
                   </Typography>
                   <Typography
                     variant="caption"

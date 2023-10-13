@@ -85,13 +85,13 @@ const NewsItem: React.FC<NewsCardProps> = ({ News }) => {
               fontWeight: "bold",
             }}
           >
-            {News.title}
+            {News && News.title ? News.title : ""}
           </Typography>
           <Typography
             variant="subtitle1"
             component="div"
             sx={{ textAlign: "left", mt: 2 }}
-            dangerouslySetInnerHTML={{ __html: News.content }}
+            dangerouslySetInnerHTML={{ __html: News?.content }}
           ></Typography>
           <Stack
             alignItems="center"
@@ -108,7 +108,7 @@ const NewsItem: React.FC<NewsCardProps> = ({ News }) => {
                   variant="body1"
                   sx={{ ml: 1, fontWeight: "bold" }}
                 >
-                  {News.countView}
+                  {News?.countView}
                 </Typography>
               </IconButton>
               <IconButton size="large" aria-label="menu" color="inherit">
@@ -118,7 +118,7 @@ const NewsItem: React.FC<NewsCardProps> = ({ News }) => {
                   variant="subtitle2"
                   sx={{ ml: 1, fontWeight: "bold" }}
                 >
-                  {News.totalCommnet}
+                  {News?.totalCommnet}
                 </Typography>
               </IconButton>
             </Box>
@@ -129,7 +129,7 @@ const NewsItem: React.FC<NewsCardProps> = ({ News }) => {
                 variant="subtitle2"
                 sx={{ ml: 1, fontWeight: "bold" }}
               >
-                {News.datePost}
+                {News?.datePost}
               </Typography>
             </Stack>
           </Stack>

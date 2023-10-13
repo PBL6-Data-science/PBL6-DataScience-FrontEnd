@@ -12,7 +12,7 @@ import {
 import dayjs from "dayjs";
 
 interface IntroductionCardProps {
-  title: string;
+  title?: string;
   userProfile: {
     userName: string | null;
     userEmail: string | null;
@@ -33,7 +33,7 @@ const IntroductionCard: React.FC<IntroductionCardProps> = ({
         <>
           <Typography gutterBottom variant={"subtitle1"} mb={3}>
             {/* thay thế bằng giới thiệu bản thân */}
-            {userProfile.userName}
+            {userProfile?.userName}
           </Typography>
           <Box ml={3}>
             <Stack
@@ -45,7 +45,7 @@ const IntroductionCard: React.FC<IntroductionCardProps> = ({
             >
               <IconMail style={{ flexShrink: 0, width: "20px" }} />
               <Typography gutterBottom variant={"h6"}>
-                {userProfile.userEmail}
+                {userProfile?.userEmail}
               </Typography>
             </Stack>
             <Stack
@@ -57,7 +57,7 @@ const IntroductionCard: React.FC<IntroductionCardProps> = ({
             >
               <IconPhoneCall style={{ flexShrink: 0, width: "20px" }} />
               <Typography gutterBottom variant={"h6"}>
-                {userProfile.userPhoneNum}
+                {userProfile?.userPhoneNum}
               </Typography>
             </Stack>
             <Stack
@@ -69,7 +69,7 @@ const IntroductionCard: React.FC<IntroductionCardProps> = ({
             >
               <IconBrandGoogleMaps style={{ flexShrink: 0, width: "20px" }} />
               <Typography gutterBottom variant={"h6"}>
-                {userProfile.userAddress}
+                {userProfile?.userAddress}
               </Typography>
             </Stack>
             <Stack
@@ -81,8 +81,8 @@ const IntroductionCard: React.FC<IntroductionCardProps> = ({
             >
               <IconCake style={{ flexShrink: 0, width: "20px" }} />
               <Typography gutterBottom variant={"h6"}>
-                {userProfile.userBirthday
-                  ? dayjs(userProfile.userBirthday).format("MMMM D, YYYY")
+                {userProfile?.userBirthday
+                  ? dayjs(userProfile?.userBirthday).format("MMMM D, YYYY")
                   : null}
               </Typography>
             </Stack>
@@ -94,7 +94,7 @@ const IntroductionCard: React.FC<IntroductionCardProps> = ({
             >
               <IconGenderTransgender style={{ flexShrink: 0, width: "20px" }} />
               <Typography gutterBottom variant="h6">
-                {userProfile.userSex === 0 ? "Male" : "Female"}
+                {userProfile?.userSex === 0 ? "Male" : "Female"}
               </Typography>
             </Stack>
           </Box>
