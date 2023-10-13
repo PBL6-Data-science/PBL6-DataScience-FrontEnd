@@ -64,6 +64,7 @@
     "@types/quill": "^2.0.12"
   },
   "engines": {
-    "node": "16.x"
+    "node": "16.x",
+    "yarn": "1.x"
   }
 }
