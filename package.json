@@ -62,5 +62,8 @@
     "@types/js-cookie": "^3.0.4",
     "@types/lodash": "^4.14.198",
     "@types/quill": "^2.0.12"
+  },
+  "engines": {
+    "node": "16.x"
   }
 }
