@@ -24,12 +24,22 @@ const convertJsonToList = (
 ) => {
   return dataArray.map((item, index) => {
     const mappedItem = mappingFunction(item);
-    return { ...mappedItem, id: uniqueId() };
+    return { ...mappedItem };
   });
 };
+
+const getDatetimeNow = () => {
+  const currentDate = new Date();
+  const formattedDateTimeVN = moment(currentDate).format(
+    "YYYY-MM-DDTHH:mm:ss.SSS"
+  );
+  return formattedDateTimeVN;
+};
+
 export {
   dateFormat,
   dateConvertExport,
   mapObjectProperties,
   convertJsonToList,
+  getDatetimeNow,
 };

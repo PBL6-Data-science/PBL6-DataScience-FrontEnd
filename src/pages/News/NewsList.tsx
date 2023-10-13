@@ -27,10 +27,11 @@ const mapToNews = (item: any) => {
     id: item.nnId.toString(),
     title: item.nnTitle.toString(),
     content: item.nnContent,
-    author: item.nnAuthorId,
+    postDate: item.nnPostDate,
     typeID: item.nTypeId.toString(),
     backgroundUrl: item.nnUrl,
     createDate: item.nnCreateDate,
+    createBy: item.nnCreateBy,
     lastUpdatedate: item.nnLastUpdateDate,
     lastUpdateby: item.nnLastUpdateBy,
     countView: item.nnCountView.toString(),
@@ -44,6 +45,7 @@ interface NewsItem {
   postDate: string;
   typeID: string;
   backgroundUrl: string;
+  createBy: string;
   createDate: string;
   lastUpdatedate: string;
   lastUpdateby: string;
@@ -100,7 +102,7 @@ const NewsList = () => {
             Post News
           </ResetButtonStyled>
         </Stack>
-        <Grid container spacing={2}>
+        <Grid container spacing={6}>
           {menuItems.map((news, index) => (
             <Grid item key={index} xs={12} sm={6} md={4}>
               <NewsItem

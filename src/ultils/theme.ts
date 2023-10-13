@@ -21,6 +21,10 @@ const theme = createTheme({
     error: {
       main: red.A400,
     },
+    background: {
+      paper: '#a5f3ff', // Use theme.palette.background.paper
+    },
+    divider: '#e0e0e0', 
   },
   typography: {
     fontFamily: roboto.style.fontFamily,

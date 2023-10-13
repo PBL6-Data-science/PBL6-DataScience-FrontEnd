@@ -71,16 +71,15 @@ const onDelete = (url: any) => {
  */
 const update = (
   url: string,
-  data: object,
-  headers: { [key: string]: string }
+  data: Record<string, any>,
+  headers: Record<string, any>
 ) => {
+  console.log("api ", url, data, headers);
   const Auth = AuthService();
-  if (!headers) {
-    headers = {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    };
-  }
+  headers = headers || {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  };
 
   if (Auth.loggedIn()) {
     headers["Authorization"] = "Bearer " + Auth.getToken();
