@@ -11,19 +11,7 @@ import {
 } from "@mui/material";
 import { IconEye, IconArticle, IconPoint } from "@tabler/icons-react";
 
-interface NewsCardProps {
-  News: {
-    backGroundUrl: string | null;
-    userImageUrl: string | null;
-    title: string;
-    content: string;
-    countView: string;
-    totalCommnet: string;
-    datePost: string;
-  };
-}
-
-const NewsItem: React.FC<NewsCardProps> = ({ News }) => {
+const NewsItem: React.FC<NewsItemProps> = ({ News }) => {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   return (
     <>
@@ -64,7 +52,7 @@ const NewsItem: React.FC<NewsCardProps> = ({ News }) => {
               }}
             />
             <Chip
-              label="Example Chip"
+              label={News && News.typeName ? News.typeName : "UNDEFINED"}
               variant="filled"
               color="secondary"
               sx={{
@@ -77,7 +65,7 @@ const NewsItem: React.FC<NewsCardProps> = ({ News }) => {
           </Box>
 
           <Typography
-            variant="h5"
+            variant="h6"
             component="div"
             sx={{
               textAlign: "left",
@@ -87,12 +75,6 @@ const NewsItem: React.FC<NewsCardProps> = ({ News }) => {
           >
             {News && News.title ? News.title : ""}
           </Typography>
-          <Typography
-            variant="subtitle1"
-            component="div"
-            sx={{ textAlign: "left", mt: 2 }}
-            dangerouslySetInnerHTML={{ __html: News?.content }}
-          ></Typography>
           <Stack
             alignItems="center"
             justifyContent="space-between"
@@ -129,7 +111,7 @@ const NewsItem: React.FC<NewsCardProps> = ({ News }) => {
                 variant="subtitle2"
                 sx={{ ml: 1, fontWeight: "bold" }}
               >
-                {News?.datePost}
+                {News?.postDate}
               </Typography>
             </Stack>
           </Stack>

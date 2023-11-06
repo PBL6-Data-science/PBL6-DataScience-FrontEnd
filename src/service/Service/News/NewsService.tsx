@@ -1,4 +1,5 @@
 import Api from "../api";
+import ApiAI from "../apiAI";
 
 const NewsService = () => {
   const getAllNews = async () => {
@@ -81,6 +82,26 @@ const NewsService = () => {
       });
   };
 
+  const predictNews = async (news: any) => {
+    return await ApiAI.create(`/model/predict-data`, news)
+      .then((response) => {
+        return Promise.resolve(response);
+      })
+      .catch((error) => {
+        return Promise.reject(error);
+      });
+  };
+
+  const getAllNewsStatus = async () => {
+    return await Api.get(`/News/NewsStatus`, {})
+      .then((response) => {
+        return Promise.resolve(response);
+      })
+      .catch((error) => {
+        return Promise.reject(error);
+      });
+  };
+
   return {
     getAllNews,
     getNewsByUserNo,
@@ -89,6 +110,8 @@ const NewsService = () => {
     createNews,
     updateNews,
     deleteNews,
+    predictNews,
+    getAllNewsStatus,
   };
 };
 export default NewsService;

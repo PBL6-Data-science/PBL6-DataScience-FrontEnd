@@ -24,14 +24,12 @@ type NavGroup = {
 
 interface ItemType {
   item: NavGroup;
-  onClick: (event: React.MouseEvent<HTMLElement>) => void;
   hideMenu?: any;
   level?: number | any;
   pathDirect: string;
 }
 
-const NavItem = ({ item, level, pathDirect, onClick }: ItemType) => {
-  console.log(pathDirect  );
+const NavItem = ({ item, level, pathDirect }: ItemType) => {
   const Icon = item.icon;
   const theme = useTheme();
   const itemIcon = <Icon stroke={1.5} size="1.3rem" />;
@@ -71,7 +69,6 @@ const NavItem = ({ item, level, pathDirect, onClick }: ItemType) => {
           disabled={item.disabled}
           selected={pathDirect === item.href}
           target={item.external ? "_blank" : ""}
-          onClick={onClick}
         >
           <ListItemIcon
             sx={{

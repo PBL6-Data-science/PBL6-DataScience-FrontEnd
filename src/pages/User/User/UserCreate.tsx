@@ -17,6 +17,7 @@ import {
   mapObjectProperties,
   convertJsonToList,
   getDatetimeNow,
+  mapToUser,
 } from "@/service/Helper/helper";
 import dayjs from "dayjs";
 import { storage } from "@/service/Helper/fibase";
@@ -126,7 +127,7 @@ const UserCreatePage = () => {
               .then((res) => {
                 setUser((prevUser) => ({
                   ...prevUser,
-                  ...mapObjectProperties(res.response.data, prevUser),
+                  ...mapObjectProperties(res.response.data, mapToUser),
                 }));
               })
               .catch((error) => {

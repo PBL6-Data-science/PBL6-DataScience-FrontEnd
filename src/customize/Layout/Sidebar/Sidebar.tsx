@@ -6,15 +6,16 @@ interface ItemType {
   isMobileSidebarOpen: boolean;
   onSidebarClose: (event: React.MouseEvent<HTMLElement>) => void;
   isSidebarOpen: boolean;
+  menuItems: any[];
 }
 
 const Sidebar = ({
   isMobileSidebarOpen,
   onSidebarClose,
   isSidebarOpen,
+  menuItems,
 }: ItemType) => {
   const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up("lg"));
-
   const sidebarWidth = "270px";
 
   if (lgUp) {
@@ -62,7 +63,7 @@ const Sidebar = ({
               {/* Sidebar Items */}
               {/* ------------------------------------------- */}
               <Box mt={3}>
-                <SidebarItems />
+                <SidebarItems menuItems={menuItems} />
               </Box>
             </Box>
           </Box>
@@ -93,7 +94,7 @@ const Sidebar = ({
       {/* ------------------------------------------- */}
       {/* Sidebar For Mobile */}
       {/* ------------------------------------------- */}
-      <SidebarItems />
+      <SidebarItems menuItems={menuItems} />
     </Drawer>
   );
 };

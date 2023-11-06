@@ -1,25 +1,10 @@
 import {
-  Box,
   Button,
-  ButtonProps,
-  CardContent,
   FormControlLabel,
   FormLabel,
   Grid,
   Radio,
   RadioGroup,
-  Badge,
-  Typography,
-  styled,
-  LinearProgress,
-  Modal,
-  Avatar,
-  Paper,
-  CardMedia,
-  IconButton,
-  Stack,
-  ListItemIcon,
-  Snackbar,
 } from "@mui/material";
 
 import { useEffect, useState, useMemo } from "react";
@@ -29,6 +14,7 @@ import {
   mapObjectProperties,
   convertJsonToList,
   getDatetimeNow,
+  mapToUser,
 } from "@/service/Helper/helper";
 import dayjs from "dayjs";
 import { storage } from "@/service/Helper/fibase";
@@ -121,7 +107,7 @@ const SettingProfilePage = () => {
         .then((res) => {
           setUserProfile((prevUserProfile) => ({
             ...prevUserProfile,
-            ...mapObjectProperties(res.response.data, prevUserProfile),
+            ...mapObjectProperties(res.response.data, mapToUser),
           }));
         })
         .catch((error) => {

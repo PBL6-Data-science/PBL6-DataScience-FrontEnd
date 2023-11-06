@@ -2,9 +2,6 @@ import React from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { Button, Grid, Avatar } from "@mui/material";
 
 interface NotificationProps {
@@ -54,6 +51,8 @@ const NotificationCard: React.FC<NotificationProps> = ({
                 sx={{
                   width: 300,
                   height: 300,
+                  display: "block",
+                  margin: "auto",
                 }}
               />
             </Grid>

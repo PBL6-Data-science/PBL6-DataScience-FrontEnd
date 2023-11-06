@@ -1,5 +1,4 @@
 import { Button, ButtonProps, Grid, styled, Stack } from "@mui/material";
-
 import { useEffect, useState, useMemo, useCallback } from "react";
 import UserService from "@/service/Service/User/UserService";
 import AuthService from "@/service/Service/Authentication/AuthService";
@@ -7,6 +6,8 @@ import {
   mapObjectProperties,
   convertJsonToList,
   dateConvertExport,
+  mapToNews,
+  mapToUser,
 } from "@/service/Helper/helper";
 import dayjs from "dayjs";
 
@@ -31,34 +32,6 @@ const mapToAppRole = (item: any) => {
   return {
     appRoleNo: item.arId.toString(),
     appRoleName: item.arName,
-  };
-};
-
-interface NewsItem {
-  id: string;
-  title: any;
-  content: string;
-  postDate: string;
-  typeID: string;
-  backgroundUrl: string;
-  createDate: string;
-  lastUpdatedate: string;
-  lastUpdateby: string;
-  countView: string;
-}
-
-const mapToNews = (item: any) => {
-  return {
-    id: item.nnId.toString(),
-    title: item.nnTitle.toString(),
-    content: item.nnContent,
-    postDate: item.nnPostDate,
-    typeID: item.nTypeId.toString(),
-    backgroundUrl: item.nnUrl,
-    createDate: item.nnCreateDate,
-    lastUpdatedate: item.nnLastUpdateDate,
-    lastUpdateby: item.nnLastUpdateBy,
-    countView: item.nnCountView.toString(),
   };
 };
 
@@ -91,7 +64,7 @@ const ProfilePage = () => {
       appRoleName: "",
     },
   ]);
-  const [menuItems, setMenuItems] = useState<NewsItem[]>([]);
+  const [menuItems, setMenuItems] = useState<BaseNewsProps[]>([]);
   const newsService = useMemo(() => NewsService(), []);
   const router = useRouter();
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
@@ -105,7 +78,7 @@ const ProfilePage = () => {
         .then((res) => {
           setUserProfile((prevUserProfile) => ({
             ...prevUserProfile,
-            ...mapObjectProperties(res.response.data, prevUserProfile),
+            ...mapObjectProperties(res.response.data, mapToUser),
           }));
         })
         .catch((error) => {
@@ -198,12 +171,11 @@ const ProfilePage = () => {
                     News={{
                       backGroundUrl: null,
                       userImageUrl: news.backgroundUrl,
-                      countView: news.countView,
                       title: news.title,
-                      content: news.content,
-                      datePost: dateConvertExport(
-                        news.postDate
-                      ).toLocaleString(),
+                      typeName: news.typeName,
+                      statusName: news.statusName,
+                      countView: news.countView,
+                      postDate: news.postDate ? news.postDate : "N/A",
                       totalCommnet: news.countView,
                     }}
                   />
