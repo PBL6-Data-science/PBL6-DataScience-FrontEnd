@@ -76,7 +76,7 @@ const AuthService = () => {
   const setToken = (idToken: any) => {
     var today = new Date();
     var endDate = new Date();
-    endDate.setDate(today.getDate() + 2);
+    endDate.setDate(today.getDate() + 1);
     Cookies.set("id_token", idToken, { expires: endDate });
   };
 
