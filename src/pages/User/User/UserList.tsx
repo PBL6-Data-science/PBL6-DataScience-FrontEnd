@@ -1,7 +1,7 @@
 import CustomTable from "@/customize/components/customer/CustomTable";
 import NotificationCard from "@/customize/components/customer/Notification";
 import DashboardCard from "@/customize/components/shared/DashboardCard";
-import { convertJsonToList, dateConvertExport } from "@/service/Helper/helper";
+import { convertJsonToList, mapToUser } from "@/service/Helper/helper";
 import UserService from "@/service/Service/User/UserService";
 import { Button, ButtonProps, Stack, styled } from "@mui/material";
 import { useRouter } from "next/navigation";
@@ -16,36 +16,6 @@ const ResetButtonStyled = styled(Button)<ButtonProps>(({ theme }) => ({
     marginTop: theme.spacing(4),
   },
 }));
-
-const mapToUser = (item: any) => {
-  const formatDateString = (dateString: string) => {
-    return dateString ? dateConvertExport(dateString).toLocaleString() : null;
-  };
-  return {
-    userNo: item.userNo || "",
-    userName: item.userName || "",
-    userPassword: item.userPassword || "",
-    userSex:
-      item.userSex === 1 ? "Male" : item.userSex === 2 ? "Female" : "None",
-    userPhoneNum: item.userPhoneNum || "",
-    userEmail: item.userEmail || "",
-    userBirthday: item.userBirthday ? new Date(item.userBirthday) : null,
-    userAddress: item.userAddress || "",
-    userImageUrl: item.userImageUrl || null,
-    userFBUrl: item.userFBUrl || null,
-    userInStaUrl: item.userInStaUrl || null,
-    userTWUrl: item.userTWUrl || null,
-    userStatus: item.userStatus || 0,
-    userRoleApp: item.userRoleApp || 0,
-    userCreateDate: item.userCreateDate ? new Date(item.userCreateDate) : null,
-    userLastUpdateDate: item.userLastUpdateDate
-      ? new Date(item.userLastUpdateDate)
-      : null,
-    usercountNews: item.usercountNews || 0,
-    userCountNewsFake: item.userCountNewsFake || 0,
-    userCountNewsReal: item.userCountNewsReal || 0,
-  };
-};
 
 interface User {
   userNo: string;
@@ -71,7 +41,6 @@ interface User {
 
 const UserListPage = () => {
   const [userItems, setUserItems] = useState<User[]>([]);
-  const [selectedItemId, setSelectedItemId] = useState(null);
   const [notification, setNotification] = useState<{
     open: boolean;
     success: boolean;
@@ -81,7 +50,7 @@ const UserListPage = () => {
   const router = useRouter();
   const UserHeaders = [
     { label: "No", field: "userNo", width: "130px", centered: true },
-    { label: "User Name", field: "userName", width: "130px", centered: true },
+    { label: "User Name", field: "userName", width: "200px", centered: true },
     {
       label: "User Sex",
       field: "userSex",
@@ -124,6 +93,7 @@ const UserListPage = () => {
       await userService
         .getAllUser()
         .then((res) => {
+          console.log(res);
           setUserItems(convertJsonToList(res.response.data, mapToUser));
         })
         .catch((error) => {
@@ -139,18 +109,14 @@ const UserListPage = () => {
     fetchNewsItems();
   }, [fetchNewsItems]);
 
-  const handleItemSelected = (itemId: any) => {
-    setSelectedItemId(itemId);
+  const handleItemUpdate = (itemId: any) => {
+    router.push(`/user/userEdit/${itemId}`);
   };
 
-  const handleItemUpdate = () => {
-    router.push(`/user/userEdit/${selectedItemId}`);
-  };
-
-  const handleItemDelete = async () => {
+  const handleItemDelete = async (itemId: any) => {
     try {
       await userService
-        .deleteUser(selectedItemId)
+        .deleteUser(itemId)
         .then((res) => {
           setNotification({
             open: true,
@@ -167,7 +133,6 @@ const UserListPage = () => {
     }
   };
 
-  console.log(selectedItemId);
   return (
     <DashboardCard title="User Management">
       <>
@@ -196,7 +161,6 @@ const UserListPage = () => {
           tableHeaders={UserHeaders}
           title="Data User"
           identifierField="userNo"
-          onItemSelected={handleItemSelected}
           onDelete={handleItemDelete}
           onUpdate={handleItemUpdate}
         />

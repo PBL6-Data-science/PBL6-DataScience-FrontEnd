@@ -17,12 +17,11 @@ interface LanguageOption {
 const Language = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
-  const [selectedLanguage, setSelectedLanguage] =
-    useState<LanguageOption | null>({
-      value: "english",
-      label: "English",
-      flag: "english.png",
-    });
+  const [selectedLanguage, setSelectedLanguage] = useState<LanguageOption>({
+    value: "english",
+    label: "English",
+    flag: "english.png",
+  });
 
   const languages: LanguageOption[] = [
     { value: "english", label: "English", flag: "English.png" },

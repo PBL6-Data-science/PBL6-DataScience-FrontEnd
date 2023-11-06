@@ -1,10 +1,10 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: process.env.REACT_APP_SERVER, // Replace with your API base URL
+  baseURL: process.env.REACT_APP_SERVER_AI, // Replace with your API base URL
 });
 
-const request = function (options: any) {
+const requestAI = function (options: any) {
   const onSuccess = function (response: { data: any; status: any }) {
     return {
       response: { data: response.data, status: response.status },
@@ -60,4 +60,4 @@ const request = function (options: any) {
   return api(options).then(onSuccess).catch(onError);
 };
 
-export default request;
+export default requestAI;

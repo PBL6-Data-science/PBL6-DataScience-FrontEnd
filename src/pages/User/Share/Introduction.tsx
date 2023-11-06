@@ -32,7 +32,6 @@ const IntroductionCard: React.FC<IntroductionCardProps> = ({
       <BaseCard title={title}>
         <>
           <Typography gutterBottom variant={"subtitle1"} mb={3}>
-            {/* thay thế bằng giới thiệu bản thân */}
             {userProfile?.userName}
           </Typography>
           <Box ml={3}>

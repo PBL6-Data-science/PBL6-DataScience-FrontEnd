@@ -11,21 +11,6 @@ import dayjs from "dayjs";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 
-interface NewsPost {
-  id: string;
-  title: string;
-  content: string;
-  postDate: string | null;
-  typeID: number;
-  backgroundUrl: string | null;
-  createBy: string;
-  createDate: string | null;
-  lastUpdatedate: string | null;
-  lastUpdateby: string;
-  countView: number;
-  delFlg: boolean;
-}
-
 const NewsPostPage = () => {
   const newsID = useParams();
   const [hasEffectRun, setHasEffectRun] = useState(false);
@@ -41,17 +26,19 @@ const NewsPostPage = () => {
   const pathname = usePathname();
   const router = useRouter();
   const isNewsPostPage = pathname === "/news/newsPost";
-  const [newsPost, setnewsPost] = useState<NewsPost>({
+  const [newsPost, setnewsPost] = useState<BaseNewsProps>({
     id: "",
     title: "",
     content: "",
+    decript: "",
     postDate: null,
-    typeID: 3,
+    typeName: "",
+    statusName: "",
     backgroundUrl: null,
-    createBy: "",
+    createBy: null,
     createDate: null as string | null,
-    lastUpdatedate: null,
-    lastUpdateby: "",
+    lastUpdateDate: null,
+    lastUpdateby: null,
     countView: 1,
     delFlg: false,
   });
@@ -80,16 +67,24 @@ const NewsPostPage = () => {
                   content: isNewsPostPage
                     ? ""
                     : res.response.data.nnContent.toString(),
+                  decript: isNewsPostPage
+                    ? ""
+                    : res.response.data.nnDecript.toString(),
                   postDate: isNewsPostPage
                     ? null
                     : res.response.data.nnPostDate,
-                  typeID: isNewsPostPage
-                    ? ""
-                    : res.response.data.nTypeId.toString(),
+                  typeName: isNewsPostPage
+                    ? "UNDEFINED"
+                    : res.response.data.nTypeName,
+                  statusName: isNewsPostPage
+                    ? "PENDING"
+                    : res.response.data.nStatusName,
                   backgroundUrl: isNewsPostPage
                     ? null
                     : res.response.data.nnUrl,
-                  createBy: isNewsPostPage ? "" : res.response.data.nnCreateBy,
+                  createBy: isNewsPostPage
+                    ? auth.getUserNo()
+                    : res.response.data.nnCreateBy,
                   createDate: isNewsPostPage
                     ? null
                     : res.response.data.nnCreateDate,
@@ -97,8 +92,8 @@ const NewsPostPage = () => {
                     ? null
                     : res.response.data.nnLastUpdateDate,
                   lastUpdateby: isNewsPostPage
-                    ? ""
-                    : res.response.data.nnLastUpdateBy,
+                    ? res.response.data.nnLastUpdateBy
+                    : auth.getUserNo(),
                   countView: isNewsPostPage ? 1 : res.response.data.nnCountView,
                   delFlg: isNewsPostPage ? false : res.response.data.nnDelFlg,
                 }));
@@ -122,7 +117,7 @@ const NewsPostPage = () => {
       };
       fetchNews();
     }
-  }, [hasEffectRun, isNewsPostPage, newsID, newsService]);
+  }, [auth, hasEffectRun, isNewsPostPage, newsID, newsService]);
 
   const handleFieldChange = (fieldName: string, value: string) => {
     setnewsPost((prevUser) => ({
@@ -154,17 +149,17 @@ const NewsPostPage = () => {
   const handleSubmit = async () => {
     const updatedNewsPost = {
       ...newsPost,
-      typeID: newsPost.typeID || 3,
-      createBy: newsPost.createBy || auth.getUserNo(),
-      createDate:
-        newsPost.createDate ||
-        dayjs(new Date().toLocaleString()).format("YYYY-MM-DD HH:mm:ss"),
+      createDate: isNewsPostPage
+        ? dayjs(new Date().toLocaleString()).format("YYYY-MM-DD HH:mm:ss")
+        : newsPost.createDate,
+      lastUpdatedate: isNewsPostPage
+        ? null
+        : dayjs(new Date().toLocaleString()).format("YYYY-MM-DD HH:mm:ss"),
     };
 
     let validation = checkRequire(updatedNewsPost);
     if (!validation.sucess_flg) {
       console.log(validation.msg ? validation.msg : "");
-      //setShowAlert(true);
       return;
     } else {
       handleOpenConfirmationDialog();
@@ -172,51 +167,73 @@ const NewsPostPage = () => {
         NNId: updatedNewsPost.id,
         NNTitle: updatedNewsPost.title,
         NNContent: updatedNewsPost.content,
-        NNPostDate: updatedNewsPost.postDate,
-        NTypeId: updatedNewsPost.typeID,
+        NNDecript: updatedNewsPost.decript,
+        NNPostDate: dayjs(updatedNewsPost.postDate?.toLocaleString()).format(
+          "YYYY-MM-DD HH:mm:ss"
+        ),
+        NTypeName: updatedNewsPost.typeName,
+        NStatusName: updatedNewsPost.statusName,
         NNUrl: updatedNewsPost.backgroundUrl,
-        NNCreateDate: updatedNewsPost.createDate,
-        NNLastUpdateDate: updatedNewsPost.lastUpdatedate,
+        NNCreateDate: dayjs(
+          updatedNewsPost.createDate?.toLocaleString()
+        ).format("YYYY-MM-DD HH:mm:ss"),
+        NNLastUpdateDate: dayjs(
+          updatedNewsPost.lastUpdatedate?.toLocaleString()
+        ).format("YYYY-MM-DD HH:mm:ss"),
         NNCreateBy: updatedNewsPost.createBy,
         NNLastUpdateBy: updatedNewsPost.lastUpdateby,
         NNCountView: updatedNewsPost.countView,
         NNDelFlg: updatedNewsPost.delFlg,
       };
-      if (isNewsPostPage) {
-        await newsService
-          .createNews(newsData)
-          .then((res) => {
-            setNotification({
-              open: true,
-              success: true,
-              title: "Create Successfull",
-            });
-          })
-          .catch((error) => {
-            setNotification({
-              open: true,
-              success: false,
-              title: "Create Successfull",
-            });
+      await newsService
+        .predictNews(newsData)
+        .then(async (res) => {
+          const { predict_message } = res.response.data;
+          newsData.NTypeName = predict_message;
+
+          if (isNewsPostPage) {
+            await newsService
+              .createNews(newsData)
+              .then((res) => {
+                setNotification({
+                  open: true,
+                  success: true,
+                  title: "Create Successfull",
+                });
+              })
+              .catch((error) => {
+                setNotification({
+                  open: true,
+                  success: false,
+                  title: "Create Successfull",
+                });
+              });
+          } else {
+            await newsService
+              .updateNews(newsData)
+              .then((res) => {
+                setNotification({
+                  open: true,
+                  success: true,
+                  title: "Update Successfull",
+                });
+              })
+              .catch((error) => {
+                setNotification({
+                  open: true,
+                  success: false,
+                  title: "Update Successfull",
+                });
+              });
+          }
+        })
+        .catch((error) => {
+          setNotification({
+            open: true,
+            success: false,
+            title: error,
           });
-      } else {
-        await newsService
-          .updateNews(newsData)
-          .then((res) => {
-            setNotification({
-              open: true,
-              success: true,
-              title: "Update Successfull",
-            });
-          })
-          .catch((error) => {
-            setNotification({
-              open: true,
-              success: false,
-              title: "Update Successfull",
-            });
-          });
-      }
+        });
     }
   };
 
@@ -295,6 +312,17 @@ const NewsPostPage = () => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={8}>
+                  <CustomTextFieldWithLabel
+                    label="Decription"
+                    id="decript"
+                    value={newsPost.decript}
+                    placeholder="Enter your no"
+                    onChange={(e) =>
+                      handleFieldChange("decript", e.target.value)
+                    }
+                  />
+                </Grid>
+                <Grid item xs={12} sm={8}>
                   <QuillEditor
                     id="content"
                     value={newsPost.content}
@@ -322,7 +350,7 @@ const NewsPostPage = () => {
                     color="success"
                     onClick={handleOpenConfirmationDialog}
                   >
-                    Post News
+                    Save Change
                   </Button>
                 </Grid>
               </Grid>
@@ -344,7 +372,7 @@ const NewsPostPage = () => {
             open={notification.open}
             onClose={() => {
               setNotification({ open: false, success: false, title: "" });
-              router.back();
+              router.refresh();
             }}
             success={notification.success}
             title={notification.title}

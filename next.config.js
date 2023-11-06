@@ -4,6 +4,9 @@ const nextConfig = {
         NAME: 'DUT - BLOG',
         FULL_NAME: 'DUT - BLOG - Da Nang University of Technology',
         NEXT_PUBLIC_BASE_PATH: process.env.NEXT_PUBLIC_BASE_PATH || "",
+        REACT_APP_SERVER_AI: "http://127.0.0.1:5000/api",
+        //REACT_APP_SERVER: "https://localhost:5001/api",
+        REACT_APP_SERVE_GG: "https://sheet.best/api/sheets",
         REACT_APP_SERVER: "https://hungahot-001-site1.atempurl.com/api",
         EXPIRES: 4, // today + 4 day
 

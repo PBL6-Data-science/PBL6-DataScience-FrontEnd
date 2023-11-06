@@ -14,12 +14,14 @@ import {
   Paper,
   Popover,
   Tooltip,
+  Chip,
 } from "@mui/material";
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import SecurityUpdateGoodIcon from "@mui/icons-material/SecurityUpdateGood";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import ApprovalIcon from "@mui/icons-material/Approval";
 
 interface DataItem {
   [key: string]: any;
@@ -31,6 +33,7 @@ interface TableColumn {
   render?: (value: any) => React.ReactNode;
   width?: string;
   centered?: boolean;
+  type?: string;
 }
 
 interface CustomTableProps {
@@ -38,9 +41,9 @@ interface CustomTableProps {
   tableHeaders: TableColumn[];
   title: string;
   identifierField: keyof DataItem;
-  onItemSelected: (itemId: string | null) => void;
-  onDelete: () => void;
-  onUpdate: () => void;
+  onDelete: (itemId: any) => void;
+  onUpdate: (itemId: any) => void;
+  onApprove?: (itemId: any) => void;
 }
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -59,11 +62,12 @@ const CustomTable = ({
   tableHeaders,
   title,
   identifierField,
-  onItemSelected,
   onDelete,
   onUpdate,
+  onApprove,
 }: CustomTableProps) => {
   const [sortedField, setSortedField] = useState<keyof DataItem | null>(null);
+  const [selectedItemId, setSelectedItemId] = useState<String | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -123,12 +127,12 @@ const CustomTable = ({
     itemId: string
   ) => {
     setAnchorEl(event.currentTarget);
-    onItemSelected(itemId);
+    setSelectedItemId(itemId);
   };
 
   const handlePopoverClose = () => {
     setAnchorEl(null);
-    onItemSelected(null);
+    setSelectedItemId(null);
   };
 
   const openPopover = Boolean(anchorEl);
@@ -149,7 +153,7 @@ const CustomTable = ({
       {title ? <Typography variant="h5">{title}</Typography> : ""}
       <TableContainer
         sx={{
-          whiteSpace: "nowrap",
+          margin: "auto",
           mt: 4,
           width: "100%",
           border: "2px solid #ddd",
@@ -162,7 +166,7 @@ const CustomTable = ({
               {tableHeaders.map((header: TableColumn) => (
                 <StyledTableCell
                   key={header.field}
-                  sx={{ width: header.width || "auto", height: "50px" }}
+                  sx={{ width: header.width, height: "50px" }}
                 >
                   <Typography
                     color="Secondary"
@@ -191,15 +195,20 @@ const CustomTable = ({
                     <StyledTableCell
                       key={header.field}
                       sx={{
-                        width: header.width || "auto",
+                        maxWidth: header.width,
+                        width: header.width,
                         textAlign: header.centered ? "center" : "left",
                         fontSize: "0.85rem",
                         height: "65px",
                       }}
                     >
-                      {header.render
-                        ? header.render(item[header.field])
-                        : item[header.field] || "-"}
+                      {header.type === "chip" ? (
+                        <Chip label={item[header.field]} color="primary" />
+                      ) : header.render ? (
+                        header.render(item[header.field])
+                      ) : (
+                        item[header.field] || "-"
+                      )}
                     </StyledTableCell>
                   ))}
                   <StyledTableCell sx={{ width: "100px", textAlign: "center" }}>
@@ -230,13 +239,20 @@ const CustomTable = ({
         }}
       >
         <Stack sx={{ padding: 2 }} direction="row">
-          <Tooltip title="Security Update">
-            <IconButton onClick={onUpdate}>
+          {onApprove && (
+            <Tooltip title="Approve">
+              <IconButton onClick={() => onApprove(selectedItemId)}>
+                <ApprovalIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+          <Tooltip title="Update">
+            <IconButton onClick={() => onUpdate(selectedItemId)}>
               <SecurityUpdateGoodIcon />
             </IconButton>
           </Tooltip>
           <Tooltip title="Delete">
-            <IconButton onClick={onDelete}>
+            <IconButton onClick={() => onDelete(selectedItemId)}>
               <DeleteForeverRoundedIcon />
             </IconButton>
           </Tooltip>

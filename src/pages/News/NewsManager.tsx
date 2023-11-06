@@ -1,64 +1,50 @@
+import ApprovedCard from "@/customize/components/customer/ApprovedCard";
 import CustomTable from "@/customize/components/customer/CustomTable";
 import NotificationCard from "@/customize/components/customer/Notification";
 import DashboardCard from "@/customize/components/shared/DashboardCard";
-import { convertJsonToList, dateConvertExport } from "@/service/Helper/helper";
+import { convertJsonToList, mapToNews } from "@/service/Helper/helper";
 import NewsService from "@/service/Service/News/NewsService";
 import { useRouter } from "next/navigation";
 import { useState, useMemo, useCallback, useEffect } from "react";
 
-const mapToNews = (item: any) => {
-  const formatDateString = (dateString: string) => {
-    return dateConvertExport(dateString).toLocaleString();
-  };
-  return {
-    id: item.nnId,
-    title: item.nnTitle.toString(),
-    content: { __html: item.nnContent },
-    postDate: formatDateString(item.nnPostDate),
-    typeID: item.nTypeId.toString(),
-    backgroundUrl: item.nnUrl,
-    createDate: formatDateString(item.nnCreateDate),
-    createBy: item.nnCreateBy,
-    lastUpdateDate: formatDateString(item.nnLastUpdateDate),
-    lastUpdateby: item.nnLastUpdateBy,
-    countView: item.nnCountView.toString(),
-  };
+const defaultNewsItem: BaseNewsProps = {
+  id: "",
+  title: "Default Title",
+  content: "Default Content",
+  decript: "Default Description",
+  postDate: null,
+  typeName: "Default Type",
+  statusName: "Default Status",
+  backgroundUrl: null,
+  createBy: null,
+  createDate: null,
+  lastUpdateDate: null,
+  lastUpdateby: null,
+  countView: 0,
+  delFlg: false,
 };
 
-interface NewsItem {
-  id: string;
-  title: any;
-  content: { __html: string };
-  postDate: string;
-  typeID: string;
-  backgroundUrl: string;
-  createBy: string;
-  createDate: string;
-  lastUpdateDate: string;
-  lastUpdateby: string;
-  countView: string;
-}
-
 const NewsManagerPage = () => {
-  const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
-  const [selectedItemId, setSelectedItemId] = useState(null);
+  const [newsItems, setNewsItems] = useState<BaseNewsProps[]>([]);
   const [notification, setNotification] = useState<{
     open: boolean;
     success: boolean;
     title: string;
   }>({ open: false, success: false, title: "" });
+  const [approved, setApproved] = useState<{
+    open: boolean;
+    news: BaseNewsProps;
+  }>({
+    open: false,
+    news: {
+      ...defaultNewsItem,
+    },
+  });
   const newsService = useMemo(() => NewsService(), []);
   const router = useRouter();
   const newsHeaders = [
-    { label: "ID", field: "id", width: "130px", centered: true },
-    { label: "Title", field: "title" },
-    {
-      label: "Create Date",
-      field: "createDate",
-      width: "170px",
-      centered: true,
-    },
-    { label: "Post Date", field: "postDate", width: "170px", centered: true },
+    { label: "ID", field: "id", width: "120px", centered: true },
+    { label: "Decription", field: "decript", width: "500px" },
     {
       label: "Create By",
       field: "createBy",
@@ -66,13 +52,35 @@ const NewsManagerPage = () => {
       centered: true,
     },
     {
+      label: "Create Date",
+      field: "createDate",
+      width: "170px",
+      centered: true,
+    },
+    { label: "Post Date", field: "postDate", width: "170px", centered: true },
+
+    {
       label: "Last Update Date",
       field: "lastUpdateDate",
       width: "170px",
       centered: true,
     },
-    { label: "Count View", field: "countView", width: "90px", centered: true },
-    { label: "Type ID", field: "typeID", width: "90px", centered: true },
+    { label: "Count View", field: "countView", width: "120px", centered: true },
+    {
+      label: "Status",
+      field: "statusName",
+      width: "150px",
+      centered: true,
+      type: "chip",
+      clickable: true,
+    },
+    {
+      label: "Type",
+      field: "typeName",
+      width: "100px",
+      centered: true,
+      type: "chip",
+    },
   ];
   const fetchNewsItems = useCallback(async () => {
     try {
@@ -94,18 +102,14 @@ const NewsManagerPage = () => {
     fetchNewsItems();
   }, [fetchNewsItems]);
 
-  const handleItemSelected = (itemId: any) => {
-    setSelectedItemId(itemId);
+  const handleItemUpdate = (itemId: any) => {
+    router.push(`/news/newsEdit/${itemId}`);
   };
 
-  const handleItemUpdate = () => {
-    router.push(`/news/newsEdit/${selectedItemId}`);
-  };
-
-  const handleItemDelete = async () => {
+  const handleItemDelete = async (itemId: any) => {
     try {
       await newsService
-        .deleteNews(selectedItemId)
+        .deleteNews(itemId)
         .then((res) => {
           setNotification({
             open: true,
@@ -122,6 +126,13 @@ const NewsManagerPage = () => {
     }
   };
 
+  const handleApproveItem = (itemId: any) => {
+    setApproved({
+      open: true,
+      news: newsItems.find((item) => item.id === itemId) ?? defaultNewsItem,
+    });
+  };
+
   return (
     <DashboardCard title="News Management">
       <>
@@ -130,10 +141,18 @@ const NewsManagerPage = () => {
           tableHeaders={newsHeaders}
           title="Data Performance"
           identifierField="id"
-          onItemSelected={handleItemSelected}
           onDelete={handleItemDelete}
           onUpdate={handleItemUpdate}
-        ></CustomTable>
+          onApprove={handleApproveItem}
+        />
+        <ApprovedCard
+          open={approved.open}
+          news={approved.news}
+          onClose={() => {
+            setApproved({ open: false, news: defaultNewsItem });
+            fetchNewsItems();
+          }}
+        />
         <NotificationCard
           open={notification.open}
           onClose={() => {
