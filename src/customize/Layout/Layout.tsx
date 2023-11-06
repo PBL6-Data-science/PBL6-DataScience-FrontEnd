@@ -24,7 +24,7 @@ import { usePathname } from "next/navigation";
 import Page404 from "./Shared/NotFound";
 
 export const metadata: Metadata = {
-  title: "DUT-Blog aaaa",
+  title: "DUT-Blog",
   description: "DUT Blog App",
 };
 
@@ -112,7 +112,39 @@ interface AppRoleData {
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [isSidebarOpen, setSidebarOpen] = useState(true);
-  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([
+    {
+      id: uniqueId(),
+      title: "Home",
+      icon: null,
+      href: "",
+      navlabel: true,
+      subheader: "Home",
+    },
+
+    {
+      id: uniqueId(),
+      title: "Dashboard",
+      icon: IconLayoutDashboard,
+      href: "/",
+    },
+
+    {
+      id: uniqueId(),
+      title: "News",
+      icon: null,
+      href: "",
+      navlabel: true,
+      subheader: "News",
+    },
+
+    {
+      id: uniqueId(),
+      title: "News Report",
+      icon: IconAperture,
+      href: "/news/newsPredict",
+    },
+  ]);
   const auth = useMemo(() => AuthService(), []);
   const menu = useMemo(() => MenuService(), []);
   const fetchMenuItems = useCallback(

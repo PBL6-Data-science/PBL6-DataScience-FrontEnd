@@ -20,7 +20,7 @@ const Language = () => {
   const [selectedLanguage, setSelectedLanguage] = useState<LanguageOption>({
     value: "english",
     label: "English",
-    flag: "english.png",
+    flag: "English.png",
   });
 
   const languages: LanguageOption[] = [
