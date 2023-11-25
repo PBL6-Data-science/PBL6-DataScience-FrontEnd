@@ -8,7 +8,7 @@ const nextConfig = {
         REACT_APP_SERVER_AI: " https://ai-server-8op8.onrender.com/api",  
         //REACT_APP_SERVER: "https://localhost:5001/api",
         REACT_APP_SERVE_GG: "https://sheet.best/api/sheets",
-        REACT_APP_SERVER: "https://hungahot-001-site1.atempurl.com/api",
+        REACT_APP_SERVER: "http://hungahot01-001-site1.ftempurl.com/api",
         EXPIRES: 4, // today + 4 day
 
         // Firebase config
