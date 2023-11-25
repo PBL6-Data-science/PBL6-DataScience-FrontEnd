@@ -101,6 +101,7 @@ const NewsPredictPage = () => {
       await newsService
         .predictNews(newsData)
         .then((res) => {
+          console.log(res);
           const { predict_code, predict_message } = res.response.data;
           setnewsPost((prevNewsPost) => ({
             ...prevNewsPost,
