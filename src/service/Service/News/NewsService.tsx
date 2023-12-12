@@ -83,7 +83,7 @@ const NewsService = () => {
   };
 
   const predictNews = async (news: any) => {
-    return await ApiAI.create(`/BiLSTM/predict-data`, news)
+    return await ApiAI.create(`/GRU/predict-data`, news)
       .then((response) => {
         return Promise.resolve(response);
       })
