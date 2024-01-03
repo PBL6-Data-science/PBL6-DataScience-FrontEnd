@@ -186,7 +186,7 @@ const NewsPostPage = () => {
         NNDelFlg: updatedNewsPost.delFlg,
       };
       await newsService
-        .predictNews(newsData)
+        .predictNews(newsData, "BiLSTM")
         .then(async (res) => {
           const { predict_message } = res.response.data;
           newsData.NTypeName = predict_message;
