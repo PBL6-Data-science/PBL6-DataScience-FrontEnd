@@ -4,7 +4,16 @@ import QuillEditor from "@/customize/components/customer/QuillEditor";
 import BaseCard from "@/customize/components/shared/BaseCard";
 import DashboardCard from "@/customize/components/shared/DashboardCard";
 import NewsService from "@/service/Service/News/NewsService";
-import { Grid, Button, Avatar, CardMedia, Box } from "@mui/material";
+import {
+  Grid,
+  Button,
+  Avatar,
+  CardMedia,
+  Box,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+} from "@mui/material";
 import { useRouter } from "next/navigation";
 import React, { useMemo, useState } from "react";
 import ResultCard from "@/customize/components/customer/ResultCard";
@@ -41,6 +50,7 @@ const NewsPredictPage = () => {
     content: "",
     decript: "",
     typeName: "UNDEFINED",
+    modelName: "BiLSTM",
     satisfied: 1,
   });
 
@@ -99,7 +109,7 @@ const NewsPredictPage = () => {
         NTypeId: newsPost.typeName,
       };
       await newsService
-        .predictNews(newsData)
+        .predictNews(newsData, newsPost.modelName)
         .then((res) => {
           console.log(res);
           const { predict_code, predict_message } = res.response.data;
@@ -109,7 +119,7 @@ const NewsPredictPage = () => {
           }));
           setNotification({
             open: true,
-            success: predict_code === 0 ? true : false,
+            success: predict_message === "REAL" ? true : false,
             predict_message: predict_message,
           });
         })
@@ -177,6 +187,44 @@ const NewsPredictPage = () => {
                 justifyContent="center"
                 alignItems="center"
               >
+                <Grid item xs={12} sm={8}>
+                  <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="row-radio-buttons-group"
+                    value={newsPost.modelName}
+                    style={{ justifyContent: "space-between" }}
+                    onChange={(e) =>
+                      handleFieldChange("modelName", e.target.value)
+                    }
+                  >
+                    <FormControlLabel
+                      value="LSTM"
+                      control={<Radio />}
+                      label="LSTM"
+                    />
+                    <FormControlLabel
+                      value="BiLSTM"
+                      control={<Radio />}
+                      label="BiLSTM"
+                    />
+                    <FormControlLabel
+                      value="GRU"
+                      control={<Radio />}
+                      label="GRU"
+                    />
+                    <FormControlLabel
+                      value="CNN"
+                      control={<Radio />}
+                      label="CNN"
+                    />
+                    <FormControlLabel
+                      value="PhoBert"
+                      control={<Radio />}
+                      label="Pho-Bert"
+                    />
+                  </RadioGroup>
+                </Grid>
                 <Grid item xs={12} sm={10}>
                   <CustomTextFieldWithLabel
                     label="No"

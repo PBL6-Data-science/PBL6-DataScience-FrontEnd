@@ -34,6 +34,7 @@ interface NewsPredictProps {
   content: string;
   decript: string;
   typeName: string;
+  modelName: string;
   satisfied: number;
 }
 

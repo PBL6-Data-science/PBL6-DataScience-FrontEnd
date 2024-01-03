@@ -82,8 +82,8 @@ const NewsService = () => {
       });
   };
 
-  const predictNews = async (news: any) => {
-    return await ApiAI.create(`/LSTM`, news)
+  const predictNews = async (news: any, modelName: any) => {
+    return await ApiAI.create(`/${modelName}`, news)
       .then((response) => {
         return Promise.resolve(response);
       })
