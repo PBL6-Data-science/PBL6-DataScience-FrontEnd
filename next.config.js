@@ -5,7 +5,9 @@ const nextConfig = {
         FULL_NAME: 'DUT - BLOG - Da Nang University of Technology',
         NEXT_PUBLIC_BASE_PATH: process.env.NEXT_PUBLIC_BASE_PATH || "",
         //REACT_APP_SERVER_AI: "https://45.77.158.20:8080/api",
-        REACT_APP_SERVER_AI: " https://ai-server-8op8.onrender.com/api",  
+        REACT_APP_SERVER_AI: "http://202.182.105.189:8080/api",  
+
+        // REACT_APP_SERVER_AI: " https://ai-server-8op8.onrender.com/api",  
         //REACT_APP_SERVER: "https://localhost:5001/api",
         REACT_APP_SERVE_GG: "https://sheet.best/api/sheets",
         REACT_APP_SERVER: "https://hungahot01-001-site1.ftempurl.com/api",

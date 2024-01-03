@@ -24,7 +24,7 @@ const NewsItem: React.FC<NewsItemProps> = ({ News }) => {
           image={`${basePath}/assets/image/users/coverImage.png`}
           sx={{
             borderRadius: "16px",
-            border: "4px solid #adadad",
+            borderBottom: "2px solid #e6f0f7",
           }}
         />
         <CardContent
